@@ -1,20 +1,18 @@
 ﻿@model IEnumerable<AddressBookProject.Models.AddressRecord>
 @using AddressBookProject.Services;
 
-@{
-    ViewData["Title"] = "Index";
-}
 
-<h1>Index</h1>
+
+<h1>Address Book</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-outline-success" asp-action="Create">Add New Entry</a>
 </p>
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ImagePath)
+                @Html.DisplayNameFor(model => model.ImageData)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstName)
@@ -25,7 +23,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-            <th>
+            <th style="min-width: 8rem">
                 @Html.DisplayNameFor(model => model.Address1)
             </th>
             <th>
@@ -53,7 +51,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var addressRecord in Model)
+        @foreach (var addressRecord in Model.OrderBy(ar => ar.FirstName).OrderBy(ar => ar.LastName))
         {
             <tr>
                 <td>
@@ -76,7 +74,11 @@
                     @Html.DisplayFor(modelItem => addressRecord.Email)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => addressRecord.Address1) @Html.DisplayFor(modelItem => addressRecord.Address2)
+                    @Html.DisplayFor(modelItem => addressRecord.Address1)
+                    <div class="text-muted">
+                        @Html.DisplayFor(modelItem => addressRecord.Address2)
+                    </div>
+                  
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => addressRecord.City)
@@ -100,97 +102,40 @@
                     @Html.DisplayFor(modelItem => addressRecord.Note)
                 </td>
                 <td>
-                    @*<a class="btn btn-primary" asp-action="Edit" asp-route-id="@addressRecord.id">Edit</a><hr class="mt-1 mb-1" />
-                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@addressRecord.id">Delete</a>*@
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit-@addressRecord.id">
-                        Edit
+                    <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@addressRecord.id">Edit</a><hr class="mt-1 mb-1" />
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#delete-@addressRecord.id">
+                        Delete
                     </button>
-
                 </td>
             </tr>
-            <div class="modal fade" id="edit-@addressRecord.id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
+            <div class="modal fade" id="delete-@addressRecord.id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">@addressRecord.FirstName</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Warning!</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form asp-action="Edit" asp-route-id="@addressRecord.id" enctype="multipart/form-data">
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                <input type="hidden" asp-for="@addressRecord.id" />
-                                <input type="hidden" asp-for="@addressRecord.Created" />
-                                <div class="form-group">
-                                    <label asp-for="@addressRecord.FirstName" class="control-label"></label>
-                                    <input asp-for="@addressRecord.FirstName" class="form-control" />
-                                    <span asp-validation-for="@addressRecord.FirstName" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="@addressRecord.LastName" class="control-label"></label>
-                                    <input asp-for="@addressRecord.LastName" class="form-control" />
-                                    <span asp-validation-for="@addressRecord.LastName" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="@addressRecord.Email" class="control-label"></label>
-                                    <input asp-for="@addressRecord.Email" class="form-control" />
-                                    <span asp-validation-for="@addressRecord.Email" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="@addressRecord.ImagePath" class="control-label"></label>
-                                    <input asp-for="@addressRecord.ImageData" type="file" class="form-control" />
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="@addressRecord.Address1" class="control-label"></label>
-                                    <input asp-for="@addressRecord.Address1" class="form-control" />
-                                    <span asp-validation-for="@addressRecord.Address1" class="text-danger"></span>
-                                    <input asp-for="@addressRecord.Address2" class="form-control mt-1" placeholder="Apt, Suite, Unit, etc..." />
-                                    <span asp-validation-for="@addressRecord.Address2" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="@addressRecord.City" class="control-label"></label>
-                                    <input asp-for="@addressRecord.City" class="form-control" />
-                                    <span asp-validation-for="@addressRecord.City" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="@addressRecord.State" class="control-label"></label>
-                                    <select asp-for="@addressRecord.State" class="form-control" asp-items="ViewBag.StateList"></select>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="@addressRecord.ZipCode" class="control-label"></label>
-                                    <input asp-for="@addressRecord.ZipCode" class="form-control" />
-                                    <span asp-validation-for="@addressRecord.ZipCode" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="@addressRecord.PhoneNumber" class="control-label"></label>
-                                    <input asp-for="@addressRecord.PhoneNumber" class="form-control" />
-                                    <span asp-validation-for="@addressRecord.PhoneNumber" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="@addressRecord.Note" class="control-label"></label>
-                                    <input asp-for="@addressRecord.Note" class="form-control" />
-                                    <span asp-validation-for="@addressRecord.Note" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <input type="submit" value="Save" class="btn btn-primary" />
-                                </div>
-                            </form>
+                            You are about to delete the entry for @addressRecord.FullName 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            
+                            <form asp-action="Delete" asp-route-id="@addressRecord.id">
+                                <input type="hidden"  asp-for="@addressRecord.id" />
+                                <input type="submit" value="Delete" class="btn btn-danger" /> 
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </form>
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
         }
     </tbody>
 
 </table>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -20,7 +20,7 @@ namespace AddressBookProject.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "AddressRecords");
         }
 
         public IActionResult Privacy()
