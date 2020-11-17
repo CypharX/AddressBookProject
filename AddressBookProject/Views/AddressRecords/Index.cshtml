@@ -23,7 +23,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-            <th style="min-width: 8rem">
+            <th class="addressWidth">
                 @Html.DisplayNameFor(model => model.Address1)
             </th>
             <th>
@@ -102,7 +102,7 @@
                     @Html.DisplayFor(modelItem => addressRecord.Note)
                 </td>
                 <td>
-                    <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@addressRecord.id">Edit</a><hr class="mt-1 mb-1" />
+                    <a class="btn btn-outline-primary w-100" asp-action="Edit" asp-route-id="@addressRecord.id">Edit</a><hr class="mt-1 mb-1" />
                     <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#delete-@addressRecord.id">
                         Delete
                     </button>
