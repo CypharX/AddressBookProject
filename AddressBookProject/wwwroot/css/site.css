@@ -69,6 +69,6 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
-.addressWidth {
-    min-width: 8rem;
+.avatar{
+    max-height: 6rem;
 }
